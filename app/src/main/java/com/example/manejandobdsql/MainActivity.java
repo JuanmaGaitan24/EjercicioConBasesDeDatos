@@ -19,8 +19,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etidentificador, etMarca, etModelo, etPrecio;
-    Button btnMostrar, btnGuardar, btnBorrar, btnActualizar;
+    EditText etidentificador, etMarca, etModelo, etPrecio, etPreInicial, etPreFinal;
+    Button btnMostrar, btnGuardar, btnBorrar, btnActualizar, btnBuscar;
     ListView lista;
     ArrayList<Movil> movil;
 
@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
         btnBorrar = findViewById(R.id.buttonBorrar);
         btnActualizar = findViewById(R.id.buttonActualizar);
         lista = findViewById(R.id.listviewlista);
+        btnBuscar = findViewById(R.id.buttonBuscar);
+        etPreInicial = findViewById(R.id.editTextPrecioIni);
+        etPreFinal = findViewById(R.id.editTextPrecioFin);
 
         ManejadorBD manejadorBD = new ManejadorBD(this);
 
@@ -120,6 +123,15 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
+
+            }
+        });
+
+        btnBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
 
             }
         });
