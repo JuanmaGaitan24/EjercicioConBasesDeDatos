@@ -59,9 +59,9 @@ public class ManejadorBD extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor ListarPorPrecios(){
+    public Cursor ListarPorPrecios(int preini, int prefin){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_PRECIO + " >= " + preini + " && " + COL_PRECIO + " <= " + prefin, null);
         return cursor;
     }
 

@@ -131,7 +131,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                try {
 
+                    int preini = Integer.valueOf(String.valueOf(etPreInicial.getText()));
+                    int prefin = Integer.valueOf(String.valueOf(etPreFinal.getText()));
+
+                    manejadorBD.ListarPorPrecios(preini, prefin);
+
+                    if (lista.getCount() == 0){
+                        Toast.makeText(MainActivity.this, "Intorduzca los numeros correctamente",Toast.LENGTH_SHORT).show();
+                    }
+
+                }catch (Exception e){
+                    Toast.makeText(MainActivity.this, "Intorduzca los numeros correctamente",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
