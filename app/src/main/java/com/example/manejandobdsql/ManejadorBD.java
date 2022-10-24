@@ -32,12 +32,12 @@ public class ManejadorBD extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_NAME + "(" + CAL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COL_MODELO + " TEXT,"
                 + COL_MARCA + " TEXT,"
-                + COL_PRECIO + " TEXT"
+                + COL_PRECIO + " INT"
                 + ")");
 
     }
 
-    public boolean insertar(String modelo, String marca, String precio){
+    public boolean insertar(String modelo, String marca, int precio){
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -61,11 +61,11 @@ public class ManejadorBD extends SQLiteOpenHelper {
 
     public Cursor ListarPorPrecios(int preini, int prefin){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_PRECIO + " >= ? AND " + COL_PRECIO + " <= ?", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_PRECIO + " >= ? AND " + COL_PRECIO + " <= ?", new String[] {String.valueOf(preini), String.valueOf(prefin)});
         return cursor;
     }
 
-    public boolean actualizar(String id, String modelo, String marca, String precio){
+    public boolean actualizar(String id, String modelo, String marca, int precio){
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

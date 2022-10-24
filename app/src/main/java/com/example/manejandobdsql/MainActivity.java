@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnMostrar, btnGuardar, btnBorrar, btnActualizar, btnBuscar;
     ListView lista;
     ArrayList<Movil> movil;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +46,13 @@ public class MainActivity extends AppCompatActivity {
 
         ManejadorBD manejadorBD = new ManejadorBD(this);
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.error);
+
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                boolean resultado = manejadorBD.insertar(etModelo.getText().toString(), etMarca.getText().toString(), etPrecio.getText().toString());
+                boolean resultado = manejadorBD.insertar(etModelo.getText().toString(), etMarca.getText().toString(), Integer.valueOf(String.valueOf(etPrecio.getText())));
 
                 if (resultado) {
                     Toast.makeText(MainActivity.this, "se ha insertado correctamente", Toast.LENGTH_SHORT).show();
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         btnActualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean resultado = manejadorBD.actualizar(etidentificador.getText().toString(), etModelo.getText().toString(), etMarca.getText().toString(), etPrecio.getText().toString());
+                boolean resultado = manejadorBD.actualizar(etidentificador.getText().toString(), etModelo.getText().toString(), etMarca.getText().toString(), Integer.valueOf(String.valueOf(etPrecio.getText())));
 
                 Toast.makeText(MainActivity.this, resultado?"Modificado correctamente":"No se ha modificado", Toast.LENGTH_SHORT).show();
             }
@@ -131,19 +135,41 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                try {
+                int preini = Integer.valueOf(String.valueOf(etPreInicial.getText()));
+                int prefin = Integer.valueOf(String.valueOf(etPreFinal.getText()));
 
-                    int preini = Integer.valueOf(String.valueOf(etPreInicial.getText()));
-                    int prefin = Integer.valueOf(String.valueOf(etPreFinal.getText()));
+                Cursor cursor = manejadorBD.ListarPorPrecios(preini, prefin);
 
-                    manejadorBD.ListarPorPrecios(preini, prefin);
+                movil = new ArrayList<>();
+                ArrayAdapter <String> arrayAdapter;
+                List<String> list = new ArrayList<>();
 
-                    if (lista.getCount() == 0){
-                        Toast.makeText(MainActivity.this, "Intorduzca los numeros correctamente",Toast.LENGTH_SHORT).show();
+                if (cursor != null && cursor.getCount() > 0){
+                    while (cursor.moveToNext()){
+                        Movil movil1 = new Movil(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
+                        String fila = movil1.toString();
+                        list.add(fila);
+                        movil.add(movil1);
                     }
 
-                }catch (Exception e){
-                    Toast.makeText(MainActivity.this, "Intorduzca los numeros correctamente",Toast.LENGTH_SHORT).show();
+                    arrayAdapter = new ArrayAdapter<>(getBaseContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, list);
+                    lista.setAdapter(arrayAdapter);
+
+                    lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            etidentificador.setText(movil.get(i).getId());
+                            etModelo.setText(movil.get(i).getModelo());
+                            etMarca.setText(movil.get(i).getMarca());
+                            etPrecio.setText(movil.get(i).getPrecio());
+
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Lista vacia",Toast.LENGTH_SHORT).show();
+                    mediaPlayer.start();
                 }
 
             }
