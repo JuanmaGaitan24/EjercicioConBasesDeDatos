@@ -61,7 +61,7 @@ public class ManejadorBD extends SQLiteOpenHelper {
 
     public Cursor ListarPorPrecios(int preini, int prefin){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_PRECIO + " >= " + preini + " && " + COL_PRECIO + " <= " + prefin, null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_PRECIO + " >= ? AND " + COL_PRECIO + " <= ?", null);
         return cursor;
     }
 
